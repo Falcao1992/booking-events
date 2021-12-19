@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { BrowserRouter, Switch, Route, RouteComponentProps } from 'react-router-dom'
-import './App.css'
 import routes from './config/routes'
-import NavBar from './features/NavBar/NavBar'
+import NavBar from './features/navBar/NavBar'
+import './App.css'
 
-function App() {
+const App: FC = () => {
     return (
         <div>
             <BrowserRouter>

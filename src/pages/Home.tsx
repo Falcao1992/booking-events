@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import IPage from '../interfaces/page'
-import logging from '../config/logging'
+import EventList from '../features/events/EventList'
 
-const Home: React.FunctionComponent<IPage> = (props) => {
-    useEffect(() => {
-        logging.info(`Loading ${props.name}`)
-    }, [])
-    return <div>this is page home</div>
+const Home: React.FunctionComponent<IPage> = () => {
+    return (
+        <main>
+            <EventList />
+        </main>
+    )
 }
 
 export default Home

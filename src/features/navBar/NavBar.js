@@ -1,12 +1,16 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 
 function NavBar() {
     return (
         <NavStyled>
-            <LinkStyled to="/">go ton home page</LinkStyled>
-            <LinkStyled to="/counter">go ton counter page</LinkStyled>
+            <NavLinkStyled exact to="/" activeClassName="selected">
+                home page
+            </NavLinkStyled>
+            <NavLinkStyled to="/counter" activeClassName="selected">
+                counter page
+            </NavLinkStyled>
         </NavStyled>
     )
 }
@@ -17,9 +21,13 @@ const NavStyled = styled.nav`
     justify-content: center;
     padding: 14px;
     background-color: #dcdbf9;
+
+    .selected {
+        background-color: #1b1a71;
+    }
 `
 
-const LinkStyled = styled(Link)`
+const NavLinkStyled = styled(NavLink)`
     text-decoration: none;
     text-transform: capitalize;
     background-color: #5e5af7;
@@ -31,7 +39,7 @@ const LinkStyled = styled(Link)`
     transition: background-color .3s ease-in-out;
 
     &:hover { {
-        background-color: #100e4e;
+      background-color: #1b1a71;
     }
 `
 
