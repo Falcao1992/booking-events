@@ -6,3 +6,11 @@ export interface IEvent {
     nbReservations: number
     limitReservation: number
 }
+
+export interface IRegistration {
+    firstname: string
+    lastname: string
+    email: string
+    phoneNumber?: number | string
+    eventId?: number
+}

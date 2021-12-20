@@ -31,4 +31,20 @@ export const fakeEvents = [
         nbReservations: 15,
         limitReservation: 50,
     },
+    {
+        id: 5,
+        name: 'Coupe de France',
+        beginDate: '2021-11-09T00:26:02+00:00',
+        endDate: '2021-11-09T00:56:02+00:00',
+        nbReservations: 15,
+        limitReservation: 50,
+    },
+    {
+        id: 6,
+        name: 'Match de Ligue 1',
+        beginDate: '2021-11-09T00:26:02+00:00',
+        endDate: '2021-11-09T00:56:02+00:00',
+        nbReservations: 15,
+        limitReservation: 50,
+    },
 ]

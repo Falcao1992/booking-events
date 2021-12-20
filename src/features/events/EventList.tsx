@@ -10,8 +10,8 @@ const EventList: FC = () => {
 
     return (
         <ContainerStyled>
-            {events.map((event: IEvent, key: number) => {
-                return <EventCard key={key} event={event} />
+            {events.map((event: IEvent) => {
+                return <EventCard key={event.id} event={event} />
             })}
         </ContainerStyled>
     )
@@ -19,7 +19,20 @@ const EventList: FC = () => {
 
 const ContainerStyled = styled.section`
     display: flex;
+    overflow-x: scroll;
     margin: 14px;
+    padding-bottom: 7px;
+    &::-webkit-scrollbar {
+        width: 4px;
+        height: 14px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border: 4px solid #dcdbf9;
+        background-color: #1b1a71;
+        border-radius: 21px;
+        box-shadow: none;
+    }
 `
 
 export default EventList
