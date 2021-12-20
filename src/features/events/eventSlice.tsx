@@ -1,5 +1,5 @@
 import { RootState } from '../../app/store'
-import { fakeEvents } from '../../fakeData/fakeData'
+import { fakeEvents } from '../../fakeData/fakeEvents'
 import { createSlice } from '@reduxjs/toolkit'
 import { IEvent } from './Interface'
 
