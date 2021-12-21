@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react'
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { selectEventSelected, submitRegistration, registrationToEvent } from '../events/eventSlice'
-import { IRegistration } from '../events/Interface'
+import { IRegistration } from '../events/Interfaces'
 
 const initialState: IRegistration = {
     firstname: '',

@@ -1,10 +1,12 @@
 import React, { useCallback } from 'react'
-import { IEvent } from './Interface'
+import { IEvent } from './Interfaces'
 import styled from 'styled-components'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { registrationToEvent, selectEventAlreadyRegistered } from './eventSlice'
+import { changeModeEvent, registrationToEvent, selectEventAlreadyRegistered } from './eventSlice'
+import { Icon } from '@iconify/react'
+import bxMessageSquareEdit from '@iconify/icons-bx/bx-message-square-edit'
 
 interface Props {
     event: IEvent
@@ -15,8 +17,12 @@ const EventCard = ({ event }: Props) => {
     const dispatch = useAppDispatch()
 
     const checkAlreadyRegister = useCallback(
-        (eventId: number): boolean => {
-            return !!(eventId && alreadyRegistered.find((ev) => ev === eventId))
+        (eventId: number | string, nbReservation: number, limitReservation: number): string => {
+            if (nbReservation >= limitReservation) return 'limitReached'
+            else if (eventId && alreadyRegistered.find((ev) => ev === eventId)) {
+                return 'alreadyRegistered'
+            }
+            return 'available'
         },
         [alreadyRegistered],
     )
@@ -30,15 +36,25 @@ const EventCard = ({ event }: Props) => {
         return format(formatDate, 'EEEE d MMMM', { locale: fr })
     }
 
+    const { id, name, beginDate, endDate, nbReservations, limitReservation } = event
     return (
-        <CardStyled isAlreadyRegister={checkAlreadyRegister(event.id)}>
-            <h4>{event.name}</h4>
-            <p>{`Du ${formatDate(event.beginDate)} au ${formatDate(event.beginDate)}`}</p>
+        <CardStyled status={checkAlreadyRegister(id, nbReservations, limitReservation)}>
+            <div>
+                <h4>{name}</h4>
+                <button type="button" onClick={() => dispatch(changeModeEvent({ type: 'edit', eventId: event.id }))}>
+                    <IconStyled icon={bxMessageSquareEdit} width="28" height="28" />
+                </button>
+            </div>
+            <p>{`Du ${formatDate(beginDate)} au ${formatDate(endDate)}`}</p>
             <div>
                 <p>
-                    Reservation: {event.nbReservations} / {event.limitReservation}
+                    Reservation: {nbReservations} / {limitReservation}
                 </p>
-                <button type="button" disabled={checkAlreadyRegister(event.id)} onClick={() => openRegistration()}>
+                <button
+                    type="button"
+                    disabled={checkAlreadyRegister(id, nbReservations, limitReservation) !== 'available'}
+                    onClick={() => openRegistration()}
+                >
                     Participer
                 </button>
             </div>
@@ -47,7 +63,7 @@ const EventCard = ({ event }: Props) => {
 }
 
 interface CardProps {
-    readonly isAlreadyRegister: boolean
+    readonly status: string
 }
 
 const CardStyled = styled.div<CardProps>`
@@ -58,7 +74,12 @@ const CardStyled = styled.div<CardProps>`
     margin-right: 7px;
     flex-direction: column;
     color: #1b1a71;
-    background-color: ${(p) => (p.isAlreadyRegister ? '#0cf88036' : '#dcdbf9')};
+    background-color: ${(p) =>
+        p.status === 'alreadyRegistered'
+            ? '#0cf88036'
+            : p.status === 'limitReached'
+            ? 'rgba(217,71,89,0.58)'
+            : '#dcdbf9'};
     border-radius: 16px;
     h4 {
         margin: 7px 0;
@@ -85,6 +106,14 @@ const CardStyled = styled.div<CardProps>`
             background-color: #5e5af7;
             opacity: 0.2;
         }
+    }
+`
+
+const IconStyled = styled(Icon)`
+    cursor: pointer;
+    transition: transform 0.3s linear;
+    &:hover {
+        transform: scale(1.2);
     }
 `
 

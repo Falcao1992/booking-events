@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import EventCard from './EventCard'
 import { useAppSelector } from '../../app/hooks'
 import { selectEvents } from './eventSlice'
-import { IEvent } from './Interface'
+import { IEvent } from './Interfaces'
 import styled from 'styled-components'
 
 const EventList: FC = () => {

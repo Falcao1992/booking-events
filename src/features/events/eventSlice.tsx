@@ -1,25 +1,20 @@
 import { RootState } from '../../app/store'
 import { fakeEvents } from '../../fakeData/fakeEvents'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IEvent, IRegistration } from './Interface'
-
-export interface EventsState {
-    list: IEvent[]
-    selected: number
-    alreadyRegistered: number[]
-}
+import { EventsState, IRegistration, TMode } from './Interfaces'
 
 const initialState: EventsState = {
     list: fakeEvents,
     selected: 0,
     alreadyRegistered: [],
+    mode: { type: 'default' },
 }
 
 export const eventsSlice = createSlice({
     name: 'events',
     initialState,
     reducers: {
-        registrationToEvent: (state, action: PayloadAction<number>) => {
+        registrationToEvent: (state, action: PayloadAction<number | string>) => {
             state.selected = action.payload
         },
         submitRegistration: (state, action: PayloadAction<IRegistration>) => {
@@ -34,13 +29,22 @@ export const eventsSlice = createSlice({
                 state.alreadyRegistered = [...state.alreadyRegistered, action.payload.eventId]
             }
         },
+        changeModeEvent: (state, action: PayloadAction<TMode>) => {
+            state.mode = { ...state.mode, type: action.payload.type, eventId: action.payload.eventId }
+        },
     },
 })
 
-export const { registrationToEvent, submitRegistration } = eventsSlice.actions
+export const { registrationToEvent, submitRegistration, changeModeEvent } = eventsSlice.actions
 
 export const selectEvents = (state: RootState) => state.events.list
 export const selectEventSelected = (state: RootState) => state.events.selected
 export const selectEventAlreadyRegistered = (state: RootState) => state.events.alreadyRegistered
+export const selectModeEvent = (state: RootState) => {
+    return {
+        event: state.events.list.filter((event) => event.id === state.events.mode.eventId),
+        mode: state.events.mode,
+    }
+}
 
 export default eventsSlice.reducer
