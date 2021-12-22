@@ -43,10 +43,14 @@ export const eventsSlice = createSlice({
         createEvent: (state, action: PayloadAction<IEvent>) => {
             state.list = [action.payload, ...state.list]
         },
+        deleteEvent: (state, action: PayloadAction<number | string>) => {
+            state.list = state.list.filter((event) => event.id !== action.payload)
+        },
     },
 })
 
-export const { registrationToEvent, submitRegistration, changeModeEvent, editEvent, createEvent } = eventsSlice.actions
+export const { registrationToEvent, submitRegistration, changeModeEvent, editEvent, createEvent, deleteEvent } =
+    eventsSlice.actions
 
 export const selectEvents = (state: RootState) => state.events.list
 export const selectEventSelected = (state: RootState) => state.events.selected

@@ -4,9 +4,10 @@ import styled from 'styled-components'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { changeModeEvent, registrationToEvent, selectEventAlreadyRegistered } from './eventSlice'
+import { changeModeEvent, deleteEvent, registrationToEvent, selectEventAlreadyRegistered } from './eventSlice'
 import { Icon } from '@iconify/react'
 import bxMessageSquareEdit from '@iconify/icons-bx/bx-message-square-edit'
+import crossMark from '@iconify/icons-emojione-v1/cross-mark'
 
 interface Props {
     event: IEvent
@@ -42,9 +43,17 @@ const EventCard = ({ event }: Props) => {
         <CardStyled status={checkAlreadyRegister(id, nbReservations, limitReservation)}>
             <div>
                 <h4>{name}</h4>
-                <button type="button" onClick={() => dispatch(changeModeEvent({ type: 'edit', eventId: event.id }))}>
-                    <IconStyled icon={bxMessageSquareEdit} width="21" height="21" />
-                </button>
+                <div>
+                    <button
+                        type="button"
+                        onClick={() => dispatch(changeModeEvent({ type: 'edit', eventId: event.id }))}
+                    >
+                        <IconStyled icon={bxMessageSquareEdit} width="21" height="21" />
+                    </button>
+                    <button type="button" onClick={() => dispatch(deleteEvent(event.id))}>
+                        <IconStyled icon={crossMark} width="21" height="21" />
+                    </button>
+                </div>
             </div>
             <p>{`Du ${formatDate(beginDate)} au ${formatDate(endDate)}`}</p>
             <div>
@@ -95,6 +104,7 @@ const CardStyled = styled.div<CardProps>`
         button {
             background-color: #5e5af7;
             color: #dcdbf9;
+            margin-left: 7px;
             border: 0;
             padding: 3px 7px;
             border-radius: 8px;

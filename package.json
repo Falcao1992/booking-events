@@ -48,6 +48,7 @@
   },
   "devDependencies": {
     "@iconify/icons-bx": "^1.1.4",
+    "@iconify/icons-emojione-v1": "^1.1.0",
     "@iconify/react": "^3.1.0",
     "@types/react-router-dom": "^5.3.2",
     "@types/styled-components": "^5.1.18",
