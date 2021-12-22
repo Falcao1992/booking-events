@@ -3,6 +3,7 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { selectEventSelected, submitRegistration, changeModeEvent } from '../events/eventSlice'
 import { IRegistration } from '../../interfaces/Interfaces'
 import { SectionForm } from '../../style/styled-components/SectionForm'
+import { ButtonStyled } from '../../style/styled-components/ButtonStyled'
 
 const initialState: IRegistration = {
     firstname: '',
@@ -57,13 +58,13 @@ const Subscribe: FC = () => {
                     <input type="number" name="phoneNumber" value={phoneNumber} onChange={handleChange} />
                 </div>
                 <div>
-                    <button
+                    <ButtonStyled
                         type="submit"
                         disabled={!firstname || !lastname || !email || !phoneNumber}
                         onClick={(e) => onSubmit(e)}
                     >
                         M&apos;inscrire
-                    </button>
+                    </ButtonStyled>
                 </div>
             </form>
         </SectionForm>

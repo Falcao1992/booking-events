@@ -21,17 +21,5 @@ export const SectionForm = styled.section`
             border: 1px solid #5e5af7;
             padding: 3.5px;
         }
-        button {
-            background-color: #5e5af7;
-            color: #dcdbf9;
-            border: 0;
-            padding: 3px 7px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s linear;
-            &:hover {
-                background-color: #1b1a71;
-            }
-        }
     }
 `

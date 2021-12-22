@@ -1,7 +1,7 @@
 import { RootState } from '../../app/store'
 import { fakeEvents } from '../../fakeData/fakeEvents'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { EventsState, IRegistration, TMode } from '../../interfaces/Interfaces'
+import { EventsState, IEvent, IRegistration, TMode } from '../../interfaces/Interfaces'
 
 const initialState: EventsState = {
     list: fakeEvents,
@@ -32,10 +32,21 @@ export const eventsSlice = createSlice({
         changeModeEvent: (state, action: PayloadAction<TMode>) => {
             state.mode = { ...state.mode, type: action.payload.type, eventId: action.payload.eventId }
         },
+        editEvent: (state, action: PayloadAction<IEvent>) => {
+            state.list = state.list.map((event) => {
+                if (event.id === state.mode.eventId) {
+                    return action.payload
+                }
+                return event
+            })
+        },
+        createEvent: (state, action: PayloadAction<IEvent>) => {
+            state.list = [action.payload, ...state.list]
+        },
     },
 })
 
-export const { registrationToEvent, submitRegistration, changeModeEvent } = eventsSlice.actions
+export const { registrationToEvent, submitRegistration, changeModeEvent, editEvent, createEvent } = eventsSlice.actions
 
 export const selectEvents = (state: RootState) => state.events.list
 export const selectEventSelected = (state: RootState) => state.events.selected

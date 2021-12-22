@@ -1,11 +1,12 @@
 import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react'
-import { useAppSelector } from '../../app/hooks'
-import { selectModeEvent } from './eventSlice'
+import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { changeModeEvent, createEvent, editEvent, selectModeEvent } from './eventSlice'
 import { IEvent } from '../../interfaces/Interfaces'
 import { nanoid } from 'nanoid'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { SectionForm } from '../../style/styled-components/SectionForm'
+import { ButtonStyled } from '../../style/styled-components/ButtonStyled'
 
 const initialState: IEvent = {
     id: nanoid(),
@@ -18,6 +19,7 @@ const initialState: IEvent = {
 
 const EventForm: FC = () => {
     const modeEvent = useAppSelector(selectModeEvent)
+    const dispatch = useAppDispatch()
     const [dateForm, setDataForm] = useState<IEvent>(initialState)
 
     useEffect(() => {
@@ -25,19 +27,22 @@ const EventForm: FC = () => {
     }, [modeEvent])
 
     const getDataEvent = (): void => {
-        if (modeEvent.event[0]) {
-            const { name, beginDate, endDate, nbReservations, limitReservation } = modeEvent.event[0]
+        if (modeEvent.event[0] && modeEvent.mode.type === 'edit') {
+            const { id, name, beginDate, endDate, nbReservations, limitReservation } = modeEvent.event[0]
             const dateBeginFormat = formatDate(beginDate)
             const dateEndFormat = formatDate(endDate)
             console.log('dateEndFormat', dateEndFormat)
             setDataForm({
                 ...dateForm,
+                id,
                 name,
                 beginDate: dateBeginFormat,
                 endDate: dateEndFormat,
                 nbReservations,
                 limitReservation,
             })
+        } else {
+            setDataForm({ ...initialState })
         }
     }
 
@@ -51,12 +56,18 @@ const EventForm: FC = () => {
         if (e.target.name === 'nbReservations' || e.target.name === 'limitReservation') {
             value = parseInt(e.target.value)
         }
-        console.log('typeof', typeof e.target.value)
         setDataForm({ ...dateForm, [e.target.name]: value })
     }
 
     const onSubmit = (e: FormEvent<HTMLButtonElement>): void => {
         e.preventDefault()
+        if (modeEvent.mode.type === 'edit') {
+            dispatch(editEvent(dateForm))
+        } else {
+            dispatch(createEvent(dateForm))
+        }
+
+        dispatch(changeModeEvent({ type: 'default' }))
         console.log('handle submit')
     }
 
@@ -92,13 +103,13 @@ const EventForm: FC = () => {
                     <input type="number" name="limitReservation" value={limitReservation} onChange={handleChange} />
                 </div>
                 <div>
-                    <button
+                    <ButtonStyled
                         type="submit"
                         disabled={!name || !beginDate || !endDate || !nbReservations || !limitReservation}
                         onClick={(e) => onSubmit(e)}
                     >
                         M&apos;inscrire
-                    </button>
+                    </ButtonStyled>
                 </div>
             </form>
         </SectionForm>

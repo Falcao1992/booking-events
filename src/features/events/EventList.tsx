@@ -20,7 +20,7 @@ const EventList: FC = () => {
 const ContainerStyled = styled.section`
     display: flex;
     overflow-x: scroll;
-    margin: 14px;
+    margin: 14px 0;
     padding-bottom: 7px;
     &::-webkit-scrollbar {
         width: 4px;
