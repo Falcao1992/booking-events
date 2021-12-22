@@ -1,10 +1,11 @@
 import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react'
 import { useAppSelector } from '../../app/hooks'
 import { selectModeEvent } from './eventSlice'
-import { IEvent } from './Interfaces'
+import { IEvent } from '../../interfaces/Interfaces'
 import { nanoid } from 'nanoid'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
+import { SectionForm } from '../../style/styled-components/SectionForm'
 
 const initialState: IEvent = {
     id: nanoid(),
@@ -62,59 +63,45 @@ const EventForm: FC = () => {
     const { name, beginDate, endDate, nbReservations, limitReservation } = dateForm
 
     return (
-        <div>
-            {modeEvent.mode.type === 'edit' && (
+        <SectionForm>
+            <form autoComplete="off">
                 <div>
-                    <h2>form event</h2>
-                    <form autoComplete="off">
-                        <div>
-                            <label htmlFor="name">Nom: </label>
-                            <input type="text" name="name" value={name} onChange={handleChange} />
-                        </div>
-                        <div>
-                            <label htmlFor="beginDate">Date de début: </label>
-                            <input
-                                type="datetime-local"
-                                id="beginDate"
-                                name="beginDate"
-                                value={beginDate}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="endDate">Date de fin: </label>
-                            <input
-                                type="datetime-local"
-                                id="endDate"
-                                name="endDate"
-                                value={endDate}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="nbReservations">Nombre de place: </label>
-                            <input type="number" name="nbReservations" value={nbReservations} onChange={handleChange} />
-                        </div>
-                        <div>
-                            <label htmlFor="limitReservation">Limite de place: </label>
-                            <input
-                                type="number"
-                                name="limitReservation"
-                                value={limitReservation}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <button
-                            type="submit"
-                            disabled={!name || !beginDate || !endDate || !nbReservations || !limitReservation}
-                            onClick={(e) => onSubmit(e)}
-                        >
-                            M&apos;inscrire
-                        </button>
-                    </form>
+                    <label htmlFor="name">Nom: </label>
+                    <input type="text" name="name" value={name} onChange={handleChange} />
                 </div>
-            )}
-        </div>
+                <div>
+                    <label htmlFor="beginDate">Date de début: </label>
+                    <input
+                        type="datetime-local"
+                        id="beginDate"
+                        name="beginDate"
+                        value={beginDate}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="endDate">Date de fin: </label>
+                    <input type="datetime-local" id="endDate" name="endDate" value={endDate} onChange={handleChange} />
+                </div>
+                <div>
+                    <label htmlFor="nbReservations">Nombre de place: </label>
+                    <input type="number" name="nbReservations" value={nbReservations} onChange={handleChange} />
+                </div>
+                <div>
+                    <label htmlFor="limitReservation">Limite de place: </label>
+                    <input type="number" name="limitReservation" value={limitReservation} onChange={handleChange} />
+                </div>
+                <div>
+                    <button
+                        type="submit"
+                        disabled={!name || !beginDate || !endDate || !nbReservations || !limitReservation}
+                        onClick={(e) => onSubmit(e)}
+                    >
+                        M&apos;inscrire
+                    </button>
+                </div>
+            </form>
+        </SectionForm>
     )
 }
 

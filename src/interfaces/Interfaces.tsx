@@ -1,5 +1,5 @@
 export type TMode = {
-    type: 'default' | 'create' | 'edit'
+    type: 'default' | 'create' | 'edit' | 'subscribe'
     eventId?: number | string
 }
 

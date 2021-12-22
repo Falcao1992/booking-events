@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { IEvent } from './Interfaces'
+import { IEvent } from '../../interfaces/Interfaces'
 import styled from 'styled-components'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
@@ -29,6 +29,7 @@ const EventCard = ({ event }: Props) => {
 
     const openRegistration = () => {
         dispatch(registrationToEvent(event.id))
+        dispatch(changeModeEvent({ type: 'subscribe', eventId: event.id }))
     }
 
     const formatDate = (date: string) => {
@@ -42,7 +43,7 @@ const EventCard = ({ event }: Props) => {
             <div>
                 <h4>{name}</h4>
                 <button type="button" onClick={() => dispatch(changeModeEvent({ type: 'edit', eventId: event.id }))}>
-                    <IconStyled icon={bxMessageSquareEdit} width="28" height="28" />
+                    <IconStyled icon={bxMessageSquareEdit} width="21" height="21" />
                 </button>
             </div>
             <p>{`Du ${formatDate(beginDate)} au ${formatDate(endDate)}`}</p>
@@ -75,12 +76,13 @@ const CardStyled = styled.div<CardProps>`
     flex-direction: column;
     color: #1b1a71;
     background-color: ${(p) =>
-        p.status === 'alreadyRegistered'
-            ? '#0cf88036'
-            : p.status === 'limitReached'
-            ? 'rgba(217,71,89,0.58)'
-            : '#dcdbf9'};
+        p.status === 'alreadyRegistered' ? '#0cf88036' : p.status === 'limitReached' ? '#e5062238' : '#dcdbf9'};
     border-radius: 16px;
+
+    @media screen and (max-width: 640px) {
+        width: 50%;
+        min-width: 50%;
+    }
     h4 {
         margin: 7px 0;
         font-weight: 600;
@@ -106,6 +108,9 @@ const CardStyled = styled.div<CardProps>`
             background-color: #5e5af7;
             opacity: 0.2;
         }
+    }
+    & div:last-child {
+        margin-top: auto;
     }
 `
 

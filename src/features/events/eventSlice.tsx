@@ -1,7 +1,7 @@
 import { RootState } from '../../app/store'
 import { fakeEvents } from '../../fakeData/fakeEvents'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { EventsState, IRegistration, TMode } from './Interfaces'
+import { EventsState, IRegistration, TMode } from '../../interfaces/Interfaces'
 
 const initialState: EventsState = {
     list: fakeEvents,
