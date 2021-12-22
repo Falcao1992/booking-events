@@ -3,8 +3,14 @@ import styled from 'styled-components'
 export const SectionForm = styled.section`
     width: 100%;
     display: flex;
-    justify-content: flex-start;
-    padding: 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    h2 {
+        padding: 7px;
+        border-radius: 8px;
+        color: aliceblue;
+        background-color: #1b1a71;
+    }
     form {
         > div {
             display: flex;
@@ -20,6 +26,9 @@ export const SectionForm = styled.section`
             border-radius: 8px;
             border: 1px solid #5e5af7;
             padding: 3.5px;
+        }
+        textarea {
+            resize: none;
         }
     }
 `

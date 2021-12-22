@@ -22,6 +22,11 @@ const ContainerStyled = styled.section`
     overflow-x: scroll;
     margin: 14px 0;
     padding-bottom: 7px;
+
+    & article:last-child {
+        margin-right: 0;
+    }
+
     &::-webkit-scrollbar {
         width: 4px;
         height: 14px;

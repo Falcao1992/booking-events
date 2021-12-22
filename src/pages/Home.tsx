@@ -7,6 +7,8 @@ import { useAppDispatch, useAppSelector } from '../app/hooks'
 import { changeModeEvent, selectModeEvent } from '../features/events/eventSlice'
 import styled from 'styled-components'
 import { ButtonStyled } from '../style/styled-components/ButtonStyled'
+import { Icon } from '@iconify/react'
+import circlePlus from '@iconify/icons-akar-icons/circle-plus'
 
 const Home: React.FunctionComponent<IPage> = () => {
     const modeEvent = useAppSelector(selectModeEvent)
@@ -15,8 +17,11 @@ const Home: React.FunctionComponent<IPage> = () => {
     return (
         <MainStyled>
             <div>
-                <ButtonStyled onClick={() => dispatch(changeModeEvent({ type: 'create' }))}>
+                <ButtonStyled fontSize={20} onClick={() => dispatch(changeModeEvent({ type: 'create' }))}>
                     Creer évenement
+                    <span>
+                        <Icon icon={circlePlus} />
+                    </span>
                 </ButtonStyled>
             </div>
             <EventList />
@@ -27,9 +32,10 @@ const Home: React.FunctionComponent<IPage> = () => {
 }
 
 const MainStyled = styled.main`
+    width: 100%;
     display: flex;
     flex-direction: column;
-    padding: 14px 21px;
+    padding: 14px 28px;
 `
 
 export default Home

@@ -13,6 +13,7 @@ export interface EventsState {
 export interface IEvent {
     id: number | string
     name: string
+    description: string
     beginDate: string
     endDate: string
     nbReservations: number

@@ -35,12 +35,25 @@ const EventCard = ({ event }: Props) => {
 
     const formatDate = (date: string) => {
         const formatDate = Date.parse(date)
-        return format(formatDate, 'EEEE d MMMM', { locale: fr })
+        return format(formatDate, "EEEE d MMMM 'à' h'h' mm", { locale: fr })
     }
 
-    const { id, name, beginDate, endDate, nbReservations, limitReservation } = event
+    const generateStatus = (eventId: number | string, nbReservation: number, limitReservation: number): string => {
+        const status = checkAlreadyRegister(id, nbReservations, limitReservation)
+        if (status === 'limitReached') {
+            return 'inscription fermé'
+        } else if (status === 'alreadyRegistered') {
+            return 'déja inscrit'
+        }
+        return 'inscription ouverte'
+    }
+
+    const { id, name, description, beginDate, endDate, nbReservations, limitReservation } = event
     return (
         <CardStyled status={checkAlreadyRegister(id, nbReservations, limitReservation)}>
+            <BlockStatus>
+                <p>{generateStatus(id, nbReservations, limitReservation)}</p>
+            </BlockStatus>
             <div>
                 <h4>{name}</h4>
                 <div>
@@ -55,7 +68,13 @@ const EventCard = ({ event }: Props) => {
                     </button>
                 </div>
             </div>
-            <p>{`Du ${formatDate(beginDate)} au ${formatDate(endDate)}`}</p>
+            <BlockDate>
+                <p>{`Du ${formatDate(beginDate)}`}</p>
+                <p>{`Au ${formatDate(endDate)}`}</p>
+            </BlockDate>
+            <div>
+                <p>{description}</p>
+            </div>
             <div>
                 <p>
                     Reservation: {nbReservations} / {limitReservation}
@@ -72,21 +91,42 @@ const EventCard = ({ event }: Props) => {
     )
 }
 
+const BlockStatus = styled.div`
+    width: 100%;
+    color: #1b1a71;
+    font-weight: 600;
+    margin: 7px 0;
+    padding: 3.5px;
+    display: flex;
+    justify-content: center !important;
+    text-transform: uppercase;
+    border-radius: 8px;
+    p {
+        margin: 2px 0;
+        letter-spacing: 2px;
+        text-transform: capitalize;
+    }
+`
+
 interface CardProps {
     readonly status: string
 }
 
-const CardStyled = styled.div<CardProps>`
+const CardStyled = styled.article<CardProps>`
     display: flex;
     width: 25%;
     min-width: 25%;
-    padding: 14px;
+    padding: 7px 14px;
     margin-right: 7px;
     flex-direction: column;
     color: #1b1a71;
-    background-color: ${(p) =>
-        p.status === 'alreadyRegistered' ? '#0cf88036' : p.status === 'limitReached' ? '#e5062238' : '#dcdbf9'};
+    background-color: #dcdbf9;
     border-radius: 16px;
+
+    ${BlockStatus} {
+        background-color: ${(p) =>
+            p.status === 'alreadyRegistered' ? '#0cf88036' : p.status === 'limitReached' ? '#e5062238' : 'aliceblue'};
+    }
 
     @media screen and (max-width: 640px) {
         width: 50%;
@@ -122,6 +162,9 @@ const CardStyled = styled.div<CardProps>`
     & div:last-child {
         margin-top: auto;
     }
+    p {
+        word-break: break-all;
+    }
 `
 
 const IconStyled = styled(Icon)`
@@ -129,6 +172,16 @@ const IconStyled = styled(Icon)`
     transition: transform 0.3s linear;
     &:hover {
         transform: scale(1.2);
+    }
+`
+
+const BlockDate = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start !important;
+    p {
+        font-size: 14px;
+        margin: 2px 0;
     }
 `
 

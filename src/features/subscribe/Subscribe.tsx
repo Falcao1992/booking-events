@@ -40,6 +40,7 @@ const Subscribe: FC = () => {
 
     return (
         <SectionForm>
+            <h2>Inscription événement</h2>
             <form autoComplete="off">
                 <div>
                     <label htmlFor="firstname">Prénom: </label>

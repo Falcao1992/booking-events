@@ -11,6 +11,7 @@ import { ButtonStyled } from '../../style/styled-components/ButtonStyled'
 const initialState: IEvent = {
     id: nanoid(),
     name: '',
+    description: '',
     beginDate: '',
     endDate: '',
     nbReservations: 0,
@@ -28,7 +29,7 @@ const EventForm: FC = () => {
 
     const getDataEvent = (): void => {
         if (modeEvent.event[0] && modeEvent.mode.type === 'edit') {
-            const { id, name, beginDate, endDate, nbReservations, limitReservation } = modeEvent.event[0]
+            const { id, name, description, beginDate, endDate, nbReservations, limitReservation } = modeEvent.event[0]
             const dateBeginFormat = formatDate(beginDate)
             const dateEndFormat = formatDate(endDate)
             console.log('dateEndFormat', dateEndFormat)
@@ -36,6 +37,7 @@ const EventForm: FC = () => {
                 ...dateForm,
                 id,
                 name,
+                description,
                 beginDate: dateBeginFormat,
                 endDate: dateEndFormat,
                 nbReservations,
@@ -51,7 +53,7 @@ const EventForm: FC = () => {
         return format(formatDate, "yyyy-MM-dd'T'hh:mm", { locale: fr })
     }
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void => {
         let value: string | number = e.target.value
         if (e.target.name === 'nbReservations' || e.target.name === 'limitReservation') {
             value = parseInt(e.target.value)
@@ -71,14 +73,26 @@ const EventForm: FC = () => {
         console.log('handle submit')
     }
 
-    const { name, beginDate, endDate, nbReservations, limitReservation } = dateForm
+    const { name, description, beginDate, endDate, nbReservations, limitReservation } = dateForm
 
     return (
         <SectionForm>
+            <h2>Modification événement</h2>
             <form autoComplete="off">
                 <div>
                     <label htmlFor="name">Nom: </label>
                     <input type="text" name="name" value={name} onChange={handleChange} />
+                </div>
+                <div>
+                    <label htmlFor="description">Description: </label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        value={description}
+                        rows={3}
+                        maxLength={100}
+                        onChange={handleChange}
+                    />
                 </div>
                 <div>
                     <label htmlFor="beginDate">Date de début: </label>
@@ -108,7 +122,7 @@ const EventForm: FC = () => {
                         disabled={!name || !beginDate || !endDate || !nbReservations || !limitReservation}
                         onClick={(e) => onSubmit(e)}
                     >
-                        M&apos;inscrire
+                        {modeEvent.mode.type === 'subscribe' ? "M'inscrire" : 'Modifier'}
                     </ButtonStyled>
                 </div>
             </form>
