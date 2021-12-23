@@ -41,11 +41,11 @@ const EventCard = ({ event }: Props) => {
     const generateStatus = (eventId: number | string, nbReservation: number, limitReservation: number): string => {
         const status = checkAlreadyRegister(id, nbReservations, limitReservation)
         if (status === 'limitReached') {
-            return 'inscription fermé'
+            return 'inscriptions fermées'
         } else if (status === 'alreadyRegistered') {
             return 'déja inscrit'
         }
-        return 'inscription ouverte'
+        return 'inscriptions ouvertes'
     }
 
     const { id, name, description, beginDate, endDate, nbReservations, limitReservation } = event

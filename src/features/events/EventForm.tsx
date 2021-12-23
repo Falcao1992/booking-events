@@ -77,14 +77,14 @@ const EventForm: FC = () => {
 
     return (
         <SectionForm>
-            <h2>Modification événement</h2>
+            <h2>{modeEvent.mode.type === 'create' ? "Création d'événement" : `Modification de l'événement ${name}`}</h2>
             <form autoComplete="off">
                 <div>
-                    <label htmlFor="name">Nom: </label>
+                    <label htmlFor="name">Nom : </label>
                     <input type="text" name="name" value={name} onChange={handleChange} />
                 </div>
                 <div>
-                    <label htmlFor="description">Description: </label>
+                    <label htmlFor="description">Description : </label>
                     <textarea
                         id="description"
                         name="description"
@@ -95,7 +95,7 @@ const EventForm: FC = () => {
                     />
                 </div>
                 <div>
-                    <label htmlFor="beginDate">Date de début: </label>
+                    <label htmlFor="beginDate">Date de début : </label>
                     <input
                         type="datetime-local"
                         id="beginDate"
@@ -105,24 +105,28 @@ const EventForm: FC = () => {
                     />
                 </div>
                 <div>
-                    <label htmlFor="endDate">Date de fin: </label>
+                    <label htmlFor="endDate">Date de fin : </label>
                     <input type="datetime-local" id="endDate" name="endDate" value={endDate} onChange={handleChange} />
                 </div>
                 <div>
-                    <label htmlFor="nbReservations">Nombre de place: </label>
+                    <label htmlFor="nbReservations">Nombre d&apos;inscrits : </label>
                     <input type="number" name="nbReservations" value={nbReservations} onChange={handleChange} />
                 </div>
                 <div>
-                    <label htmlFor="limitReservation">Limite de place: </label>
+                    <label htmlFor="limitReservation">Limite de places : </label>
                     <input type="number" name="limitReservation" value={limitReservation} onChange={handleChange} />
                 </div>
                 <div>
                     <ButtonStyled
                         type="submit"
-                        disabled={!name || !beginDate || !endDate || !nbReservations || !limitReservation}
+                        disabled={!name || !beginDate || !endDate || !limitReservation}
                         onClick={(e) => onSubmit(e)}
                     >
-                        {modeEvent.mode.type === 'subscribe' ? "M'inscrire" : 'Modifier'}
+                        {modeEvent.mode.type === 'subscribe'
+                            ? "M'inscrire"
+                            : modeEvent.mode.type === 'create'
+                            ? 'Création'
+                            : 'Modifier'}
                     </ButtonStyled>
                 </div>
             </form>

@@ -40,22 +40,22 @@ const Subscribe: FC = () => {
 
     return (
         <SectionForm>
-            <h2>Inscription événement</h2>
+            <h2>{"Inscription à l'événement"}</h2>
             <form autoComplete="off">
                 <div>
-                    <label htmlFor="firstname">Prénom: </label>
+                    <label htmlFor="firstname">Prénom : </label>
                     <input type="text" name="firstname" value={firstname} onChange={handleChange} />
                 </div>
                 <div>
-                    <label htmlFor="lastname">Nom: </label>
+                    <label htmlFor="lastname">Nom : </label>
                     <input type="text" name="lastname" value={lastname} onChange={handleChange} />
                 </div>
                 <div>
-                    <label htmlFor="email">Email: </label>
+                    <label htmlFor="email">Email : </label>
                     <input type="text" name="email" value={email} onChange={handleChange} />
                 </div>
                 <div>
-                    <label htmlFor="phoneNumber">Numéro de téléphone: </label>
+                    <label htmlFor="phoneNumber">Numéro de téléphone : </label>
                     <input type="number" name="phoneNumber" value={phoneNumber} onChange={handleChange} />
                 </div>
                 <div>
