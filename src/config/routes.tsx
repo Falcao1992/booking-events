@@ -1,6 +1,6 @@
-import Home from '../pages/Home'
-import IRoute from '../interfaces/route'
-import { Counter } from '../features/counter/Counter'
+import Home from '../views/pages/Home'
+import IRoute from '../application/interfaces/route'
+import { Counter } from '../views/components/counter/Counter'
 
 const routes: IRoute[] = [
     {

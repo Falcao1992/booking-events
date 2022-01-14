@@ -1,9 +1,9 @@
 import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react'
-import { useAppSelector, useAppDispatch } from '../../app/hooks'
-import { selectEventSelected, submitRegistration, changeModeEvent } from '../events/eventSlice'
-import { IRegistration } from '../../interfaces/Interfaces'
-import { SectionForm } from '../../style/styled-components/SectionForm'
-import { ButtonStyled } from '../../style/styled-components/ButtonStyled'
+import { useAppSelector, useAppDispatch } from '../../../application/hooks'
+import { selectEventSelected, submitRegistration, changeModeEvent } from '../../../application/event/eventSlice'
+import { IRegistration } from '../../../application/interfaces/Interfaces'
+import { SectionForm } from '../../../style/styled-components/SectionForm'
+import { ButtonStyled } from '../../../style/styled-components/ButtonStyled'
 
 const initialState: IRegistration = {
     firstname: '',

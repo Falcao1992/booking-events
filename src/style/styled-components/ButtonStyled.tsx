@@ -15,9 +15,11 @@ export const ButtonStyled = styled.button<ButtonProps>`
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s linear;
+
     &:hover {
         background-color: #1b1a71;
     }
+
     span {
         display: flex;
         margin-left: 7px;

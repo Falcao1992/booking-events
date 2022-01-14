@@ -7,6 +7,9 @@ export const fakeEvents = [
         endDate: '2021-11-09T02:56:02+00:00',
         nbReservations: 15,
         limitReservation: 15,
+        isSubscribed: false,
+        country: '',
+        department: '',
     },
     {
         id: 2,
@@ -17,6 +20,9 @@ export const fakeEvents = [
         endDate: '2021-12-08T07:56:02+00:00',
         nbReservations: 15,
         limitReservation: 50,
+        isSubscribed: false,
+        country: '',
+        department: '',
     },
     {
         id: 3,
@@ -27,6 +33,9 @@ export const fakeEvents = [
         endDate: '2021-10-08T05:56:02+00:00',
         nbReservations: 15,
         limitReservation: 50,
+        isSubscribed: false,
+        country: '',
+        department: '',
     },
     {
         id: 4,
@@ -37,6 +46,9 @@ export const fakeEvents = [
         endDate: '2021-11-09T00:56:02+00:00',
         nbReservations: 15,
         limitReservation: 50,
+        isSubscribed: false,
+        country: '',
+        department: '',
     },
     {
         id: 5,
@@ -46,6 +58,9 @@ export const fakeEvents = [
         endDate: '2021-11-09T00:56:02+00:00',
         nbReservations: 15,
         limitReservation: 15,
+        isSubscribed: false,
+        country: '',
+        department: '',
     },
     {
         id: 6,
@@ -56,5 +71,8 @@ export const fakeEvents = [
         endDate: '2021-11-09T00:56:02+00:00',
         nbReservations: 15,
         limitReservation: 50,
+        isSubscribed: false,
+        country: '',
+        department: '',
     },
 ]

@@ -1,12 +1,12 @@
 import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react'
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { changeModeEvent, createEvent, editEvent, selectModeEvent } from './eventSlice'
-import { IEvent } from '../../interfaces/Interfaces'
+import { useAppDispatch, useAppSelector } from '../../../application/hooks'
+import { changeModeEvent, createEvent, editEvent, selectModeEvent } from '../../../application/event/eventSlice'
+import { IEvent } from '../../../application/interfaces/Interfaces'
 import { nanoid } from 'nanoid'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { SectionForm } from '../../style/styled-components/SectionForm'
-import { ButtonStyled } from '../../style/styled-components/ButtonStyled'
+import { SectionForm } from '../../../style/styled-components/SectionForm'
+import { ButtonStyled } from '../../../style/styled-components/ButtonStyled'
 
 const initialState: IEvent = {
     id: nanoid(),
@@ -16,6 +16,7 @@ const initialState: IEvent = {
     endDate: '',
     nbReservations: 0,
     limitReservation: 50,
+    isSubscribed: false,
 }
 
 const EventForm: FC = () => {
@@ -32,7 +33,7 @@ const EventForm: FC = () => {
             const { id, name, description, beginDate, endDate, nbReservations, limitReservation } = modeEvent.event[0]
             const dateBeginFormat = formatDate(beginDate)
             const dateEndFormat = formatDate(endDate)
-            console.log('dateEndFormat', dateEndFormat)
+
             setDataForm({
                 ...dateForm,
                 id,
@@ -70,7 +71,6 @@ const EventForm: FC = () => {
         }
 
         dispatch(changeModeEvent({ type: 'default' }))
-        console.log('handle submit')
     }
 
     const { name, description, beginDate, endDate, nbReservations, limitReservation } = dateForm
@@ -116,6 +116,7 @@ const EventForm: FC = () => {
                     <label htmlFor="limitReservation">Limite de places : </label>
                     <input type="number" name="limitReservation" value={limitReservation} onChange={handleChange} />
                 </div>
+
                 <div>
                     <ButtonStyled
                         type="submit"

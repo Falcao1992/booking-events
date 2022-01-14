@@ -1,10 +1,16 @@
-import React, { useCallback } from 'react'
-import { IEvent } from '../../interfaces/Interfaces'
+import React, { useCallback, useEffect, useState } from 'react'
+import { IEvent } from '../../../application/interfaces/Interfaces'
 import styled from 'styled-components'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { changeModeEvent, deleteEvent, registrationToEvent, selectEventAlreadyRegistered } from './eventSlice'
+import { useAppDispatch, useAppSelector } from '../../../application/hooks'
+import {
+    changeModeEvent,
+    deleteEvent,
+    registrationToEvent,
+    selectEventAlreadyRegistered,
+    unSubscribedToEvent,
+} from '../../../application/event/eventSlice'
 import { Icon } from '@iconify/react'
 import bxMessageSquareEdit from '@iconify/icons-bx/bx-message-square-edit'
 import crossMark from '@iconify/icons-emojione-v1/cross-mark'
@@ -15,15 +21,22 @@ interface Props {
 
 const EventCard = ({ event }: Props) => {
     const alreadyRegistered = useAppSelector(selectEventAlreadyRegistered)
+    const [stateSubscription, setStateSubscription] = useState('')
     const dispatch = useAppDispatch()
 
+    useEffect(() => {
+        checkAlreadyRegister(event.id, event.nbReservations, event.limitReservation)
+    }, [stateSubscription])
+
     const checkAlreadyRegister = useCallback(
-        (eventId: number | string, nbReservation: number, limitReservation: number): string => {
-            if (nbReservation >= limitReservation) return 'limitReached'
-            else if (eventId && alreadyRegistered.find((ev) => ev === eventId)) {
-                return 'alreadyRegistered'
+        (eventId: number | string, nbReservation: number, limitReservation: number): void => {
+            if (nbReservation >= limitReservation) {
+                setStateSubscription('limitReached')
+            } else if (eventId && alreadyRegistered.filter((ev) => ev.id === eventId).length) {
+                setStateSubscription('alreadyRegistered')
+            } else {
+                setStateSubscription('available')
             }
-            return 'available'
         },
         [alreadyRegistered],
     )
@@ -31,6 +44,12 @@ const EventCard = ({ event }: Props) => {
     const openRegistration = () => {
         dispatch(registrationToEvent(event.id))
         dispatch(changeModeEvent({ type: 'subscribe', eventId: event.id }))
+        checkAlreadyRegister(event.id, event.nbReservations, event.limitReservation)
+    }
+
+    const unSubscribed = () => {
+        dispatch(unSubscribedToEvent(event.id))
+        checkAlreadyRegister(event.id, event.nbReservations, event.limitReservation)
     }
 
     const formatDate = (date: string) => {
@@ -38,11 +57,10 @@ const EventCard = ({ event }: Props) => {
         return format(formatDate, "EEEE d MMMM 'à' h'h' mm", { locale: fr })
     }
 
-    const generateStatus = (eventId: number | string, nbReservation: number, limitReservation: number): string => {
-        const status = checkAlreadyRegister(id, nbReservations, limitReservation)
-        if (status === 'limitReached') {
+    const generateStatus = (): string => {
+        if (stateSubscription === 'limitReached') {
             return 'inscriptions fermées'
-        } else if (status === 'alreadyRegistered') {
+        } else if (stateSubscription === 'alreadyRegistered') {
             return 'déja inscrit'
         }
         return 'inscriptions ouvertes'
@@ -50,20 +68,17 @@ const EventCard = ({ event }: Props) => {
 
     const { id, name, description, beginDate, endDate, nbReservations, limitReservation } = event
     return (
-        <CardStyled status={checkAlreadyRegister(id, nbReservations, limitReservation)}>
+        <CardStyled status={stateSubscription}>
             <BlockStatus>
-                <p>{generateStatus(id, nbReservations, limitReservation)}</p>
+                <p>{generateStatus()}</p>
             </BlockStatus>
             <div>
                 <h4>{name}</h4>
                 <div>
-                    <button
-                        type="button"
-                        onClick={() => dispatch(changeModeEvent({ type: 'edit', eventId: event.id }))}
-                    >
+                    <button type="button" onClick={() => dispatch(changeModeEvent({ type: 'edit', eventId: id }))}>
                         <IconStyled icon={bxMessageSquareEdit} width="21" height="21" />
                     </button>
-                    <button type="button" onClick={() => dispatch(deleteEvent(event.id))}>
+                    <button type="button" onClick={() => dispatch(deleteEvent(id))}>
                         <IconStyled icon={crossMark} width="21" height="21" />
                     </button>
                 </div>
@@ -81,10 +96,10 @@ const EventCard = ({ event }: Props) => {
                 </p>
                 <button
                     type="button"
-                    disabled={checkAlreadyRegister(id, nbReservations, limitReservation) !== 'available'}
-                    onClick={() => openRegistration()}
+                    disabled={stateSubscription === 'limitReached'}
+                    onClick={() => (stateSubscription === 'alreadyRegistered' ? unSubscribed() : openRegistration())}
                 >
-                    Participer
+                    {stateSubscription === 'alreadyRegistered' ? 'se désinscrire' : 'participer'}
                 </button>
             </div>
         </CardStyled>
@@ -101,6 +116,7 @@ const BlockStatus = styled.div`
     justify-content: center !important;
     text-transform: uppercase;
     border-radius: 8px;
+
     p {
         margin: 2px 0;
         letter-spacing: 2px;
@@ -132,15 +148,18 @@ const CardStyled = styled.article<CardProps>`
         width: 50%;
         min-width: 50%;
     }
+
     h4 {
         margin: 7px 0;
         font-weight: 600;
         text-transform: capitalize;
     }
+
     div {
         display: flex;
         justify-content: space-between;
         align-items: center;
+
         button {
             background-color: #5e5af7;
             color: #dcdbf9;
@@ -150,18 +169,22 @@ const CardStyled = styled.article<CardProps>`
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s linear;
+
             &:hover {
                 background-color: #1b1a71;
             }
         }
+
         button[disabled] {
             background-color: #5e5af7;
             opacity: 0.2;
         }
     }
+
     & div:last-child {
         margin-top: auto;
     }
+
     p {
         word-break: break-all;
     }
@@ -170,6 +193,7 @@ const CardStyled = styled.article<CardProps>`
 const IconStyled = styled(Icon)`
     cursor: pointer;
     transition: transform 0.3s linear;
+
     &:hover {
         transform: scale(1.2);
     }
@@ -179,6 +203,7 @@ const BlockDate = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start !important;
+
     p {
         font-size: 14px;
         margin: 2px 0;

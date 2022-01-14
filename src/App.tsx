@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { BrowserRouter, Switch, Route, RouteComponentProps } from 'react-router-dom'
 import routes from './config/routes'
-import NavBar from './features/navBar/NavBar'
+import NavBar from './views/components/navBar/NavBar'
 import './App.css'
 
 const App: FC = () => {

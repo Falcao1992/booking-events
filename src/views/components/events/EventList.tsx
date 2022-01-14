@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 import EventCard from './EventCard'
-import { useAppSelector } from '../../app/hooks'
-import { selectEvents } from './eventSlice'
-import { IEvent } from '../../interfaces/Interfaces'
+import { useAppSelector } from '../../../application/hooks'
+import { selectEvents } from '../../../application/event/eventSlice'
+import { IEvent } from '../../../application/interfaces/Interfaces'
 import styled from 'styled-components'
 
 const EventList: FC = () => {
