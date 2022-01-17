@@ -4,10 +4,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { EventsState, IEvent, IRegistration, TMode, TRegion } from '../interfaces/Interfaces'
 import { fetchRegions, fetchDepartments } from '../../infrastructure/event/countryAPI'
 
-const log = (obj: object): void => {
-    return console.log(JSON.parse(JSON.stringify(obj)))
-}
-
 const initialState: EventsState = {
     list: fakeEvents,
     selected: 0,
@@ -21,7 +17,7 @@ export const fetchRegionsAsync = createAsyncThunk('events/fetchRegions', async (
     // The value we return becomes the `fulfilled` action payload
     return await fetchRegions()
 })
-export const fetchDetailsCountryAsync = createAsyncThunk('events/fetchDetailsCountry', async (code: string) => {
+export const fetchDetailsCountryAsync = createAsyncThunk('events/fetchDepartments', async (code: string) => {
     // The value we return becomes the `fulfilled` action payload
     return await fetchDepartments(code)
 })

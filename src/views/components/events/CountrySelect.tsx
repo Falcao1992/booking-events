@@ -1,27 +1,30 @@
 import React, { FC, useEffect, useState } from 'react'
-import { ButtonStyled } from '../../../style/styled-components/ButtonStyled'
 import InputLabel from '@mui/material/InputLabel'
 import { fetchRegionsAsync, fetchDetailsCountryAsync } from '../../../application/event/eventSlice'
 import { useAppDispatch } from '../../../application/hooks'
 import MenuItem from '@mui/material/MenuItem'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { TRegion, TDepartment } from '../../../application/interfaces/Interfaces'
-import SelectSearch from 'react-select-search'
 
 const CountrySelect: FC = () => {
     const dispatch = useAppDispatch()
     const [StateRegions, setStateRegions] = useState<TRegion[] | null>(null)
     const [StateDepartments, setStateDepartments] = useState<TDepartment[] | null>(null)
     const [selectValue, setSelectValue] = useState<string>('')
+    const [selectValue2, setSelectValue2] = useState<string>('')
 
     useEffect(() => {
         getRegions()
     }, [])
 
     const handleChange = (e: SelectChangeEvent): void => {
-        console.log('e.target.value', e.target.value)
-        setSelectValue(e.target.value)
-        getDepartments(e.target.value)
+        if (e.target.name === 'departments') {
+            setSelectValue2(e.target.value)
+        } else {
+            console.log('e.target.value', e.target.value)
+            setSelectValue(e.target.value)
+            getDepartments(e.target.value)
+        }
     }
 
     const getDepartments = async (code: string) => {
@@ -47,19 +50,8 @@ const CountrySelect: FC = () => {
         }
     }
 
-    const options: any = [
-        { name: 'Swedish', value: 'sv' },
-        { name: 'English', value: 'en' },
-        {
-            type: 'group',
-            name: 'Group name',
-            items: [{ name: 'Spanish', value: 'es' }],
-        },
-    ]
-
     return (
         <div>
-            {StateRegions && <SelectSearch options={options} value="sv" placeholder="Choose your language" />}
             {StateRegions && (
                 <>
                     <InputLabel id="country-label">Regions</InputLabel>
@@ -74,18 +66,20 @@ const CountrySelect: FC = () => {
                     </Select>
                 </>
             )}
-            {StateDepartments && (
+            {StateDepartments && selectValue && (
                 <>
                     <InputLabel id="department-label">Departements</InputLabel>
                     <Select
                         labelId="department-label"
-                        value={selectValue}
+                        value={selectValue2}
                         label="department-list"
+                        name="departments"
                         onChange={handleChange}
+                        defaultValue=""
                     >
                         {StateDepartments.map((department: { nom: string; code: string }) => {
                             return (
-                                <MenuItem key={department.code} value={department.code}>
+                                <MenuItem key={department.code} value={department.nom}>
                                     {department.nom}
                                 </MenuItem>
                             )
@@ -93,7 +87,6 @@ const CountrySelect: FC = () => {
                     </Select>
                 </>
             )}
-            <ButtonStyled onClick={() => dispatch(fetchRegionsAsync())}>fetch regions</ButtonStyled>
         </div>
     )
 }
