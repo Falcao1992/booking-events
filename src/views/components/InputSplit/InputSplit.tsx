@@ -1,9 +1,9 @@
-import React, { useState, useRef, FC } from 'react'
+import React, { useState, useRef, FC, FormEvent, KeyboardEvent } from 'react'
 import '../../../style/InputSplit.css'
 
 type InputProps = {
     value: string
-    isUppercase: boolean
+    isUppercase?: boolean
 }
 
 const InputSplit: FC<InputProps> = ({ value, isUppercase }) => {
@@ -17,29 +17,42 @@ const InputSplit: FC<InputProps> = ({ value, isUppercase }) => {
     const valLocalRef = useRef<HTMLInputElement>(null)
     const valOptionalRef = useRef<HTMLInputElement>(null)
 
-    const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const fullValue: string = valBank + valCountry + valLocal + valOptional
+
+    const handleChange = (e: FormEvent<HTMLInputElement>) => {
         switch (e.currentTarget.name) {
             case 'valBank': {
-                if (e.currentTarget.value.length <= 4) setValBank(e.currentTarget.value)
+                if (e.currentTarget.value.length <= 4) {
+                    setValBank(e.currentTarget.value)
+                    break
+                }
                 valCountryRef.current?.focus()
                 setValCountry(e.currentTarget.value.slice(-1))
-
                 break
             }
             case 'valCountry': {
-                if (e.currentTarget.value.length <= 2) setValCountry(e.currentTarget.value)
+                if (e.currentTarget.value.length <= 2) {
+                    setValCountry(e.currentTarget.value)
+                    break
+                }
                 valLocalRef.current?.focus()
                 setValLocal(e.currentTarget.value.slice(-1))
                 break
             }
             case 'valLocal': {
-                if (e.currentTarget.value.length <= 2) setValLocal(e.currentTarget.value)
+                if (e.currentTarget.value.length <= 2) {
+                    setValLocal(e.currentTarget.value)
+                    break
+                }
                 valOptionalRef.current?.focus()
                 setValOptional(e.currentTarget.value.slice(-1))
                 break
             }
             case 'valOptional': {
-                if (e.currentTarget.value.length <= 3) setValOptional(e.currentTarget.value)
+                if (e.currentTarget.value.length <= 3) {
+                    setValOptional(e.currentTarget.value)
+                    break
+                }
                 break
             }
             default:
@@ -47,52 +60,88 @@ const InputSplit: FC<InputProps> = ({ value, isUppercase }) => {
         }
     }
 
+    const keyDownHandler = (e: KeyboardEvent) => {
+        const target = e.target as HTMLInputElement
+        if (e.key === 'Backspace') {
+            switch (target.id) {
+                case 'valCountry': {
+                    if (!target.value.length) valBankRef.current?.focus()
+                    break
+                }
+                case 'valLocal': {
+                    if (!target.value.length) valCountryRef.current?.focus()
+                    break
+                }
+                case 'valOptional': {
+                    if (!target.value.length) valLocalRef.current?.focus()
+                    break
+                }
+                default:
+                    return
+            }
+        }
+    }
+
     return (
         <div className="input--split">
+            <label className="">bic code</label>
             <div>
-                <label htmlFor="valBank">code banque</label>
+                <label htmlFor="valBank" className="label--top">
+                    code banque
+                </label>
                 <input
                     ref={valBankRef}
+                    value={!isUppercase ? valBank : valBank.toUpperCase()}
+                    onChange={handleChange}
+                    onKeyDown={keyDownHandler}
                     type="text"
                     id="valBank"
                     name="valBank"
-                    value={!isUppercase ? valBank : valBank.toUpperCase()}
-                    onChange={handleChange}
                 />
             </div>
             <div>
-                <label htmlFor="valCountry">code pays</label>
+                <label htmlFor="valCountry" className="label--bottom">
+                    code pays
+                </label>
                 <input
                     ref={valCountryRef}
+                    value={!isUppercase ? valCountry : valCountry.toUpperCase()}
+                    onChange={handleChange}
+                    onKeyDown={keyDownHandler}
                     type="text"
                     id="valCountry"
                     name="valCountry"
-                    value={!isUppercase ? valCountry : valCountry.toUpperCase()}
-                    onChange={handleChange}
                 />
             </div>
             <div>
-                <label htmlFor="valLocal">code localisation</label>
+                <label htmlFor="valLocal" className="label--top">
+                    code localisation
+                </label>
                 <input
                     ref={valLocalRef}
+                    value={!isUppercase ? valLocal : valLocal.toUpperCase()}
+                    onChange={handleChange}
+                    onKeyDown={keyDownHandler}
                     type="text"
                     id="valLocal"
                     name="valLocal"
-                    value={!isUppercase ? valLocal : valLocal.toUpperCase()}
-                    onChange={handleChange}
                 />
             </div>
             <div>
-                <label htmlFor="valOptional">code localisation</label>
+                <label htmlFor="valOptional" className="label--bottom">
+                    code localisation
+                </label>
                 <input
                     ref={valOptionalRef}
+                    value={!isUppercase ? valOptional : valOptional.toUpperCase()}
+                    onChange={handleChange}
+                    onKeyDown={keyDownHandler}
                     type="text"
                     id="valOptional"
                     name="valOptional"
-                    value={!isUppercase ? valOptional : valOptional.toUpperCase()}
-                    onChange={handleChange}
                 />
             </div>
+            <input id="bic-code" type="text" value={fullValue} readOnly />
         </div>
     )
 }
