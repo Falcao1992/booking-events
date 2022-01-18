@@ -12,6 +12,7 @@ import circlePlus from '@iconify/icons-akar-icons/circle-plus'
 import ResumeEventSubscribe from '../components/ResumeEventSubscribe/ResumeEventSubscribe'
 import CountrySelect from '../components/events/CountrySelect'
 import InputSplit from '../components/InputSplit/InputSplit'
+import Array from '../components/array/Array'
 
 const Home: React.FunctionComponent<IPage> = () => {
     const modeEvent = useAppSelector(selectModeEvent)
@@ -33,8 +34,14 @@ const Home: React.FunctionComponent<IPage> = () => {
             {(modeEvent.mode.type === 'edit' || modeEvent.mode.type === 'create') && <EventForm />}
             <ResumeEventSubscribe />
             <CountrySelect />
-            <h2>Input Split</h2>
-            <InputSplit value="saluedjfgf" isUppercase />
+            <section>
+                <h2>Input Split</h2>
+                <InputSplit value="saluedjfgf" isUppercase />
+            </section>
+            <section>
+                <h2>Tableau</h2>
+                <Array />
+            </section>
         </MainStyled>
     )
 }
